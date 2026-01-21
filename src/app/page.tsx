@@ -2,6 +2,9 @@ import Link from 'next/link';
 import { getProducts } from '@/lib/api';
 import { ProductCard } from '@/components/ProductCard';
 
+// Force dynamic rendering to fetch fresh data on each request
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const products = await getProducts({ limit: 4 });
 
