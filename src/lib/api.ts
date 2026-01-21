@@ -19,6 +19,14 @@ export interface ProductsResponse {
   limit: number;
 }
 
+// Spring Boot Page response format
+interface SpringPageResponse {
+  content: Product[];
+  totalElements: number;
+  number: number;
+  size: number;
+}
+
 interface GetProductsOptions {
   limit?: number;
   page?: number;
@@ -85,7 +93,10 @@ const mockProducts: Product[] = [
 
 async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
   try {
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    const url = `${API_URL}${endpoint}`;
+    console.log('Fetching from URL:', url);
+
+    const response = await fetch(url, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -94,11 +105,15 @@ async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> 
       next: { revalidate: 60 }, // Cache for 60 seconds
     });
 
+    console.log('Response status:', response.status, 'for URL:', url);
+
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }
 
-    return response.json();
+    const data = await response.json();
+    console.log('Response data:', JSON.stringify(data).substring(0, 200));
+    return data;
   } catch (error) {
     console.warn('API unavailable, using mock data:', error);
     throw error;
@@ -111,19 +126,26 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
   try {
     const params = new URLSearchParams();
     if (limit) params.append('limit', String(limit));
-    if (page) params.append('page', String(page));
+    // Spring Boot uses 0-based page indexing, so subtract 1
+    if (page) params.append('page', String(page - 1));
     if (category) params.append('category', category);
 
     const queryString = params.toString();
-    const endpoint = `/api/products${queryString ? `?${queryString}` : ''}`;
+    const endpoint = `/api/v1/products${queryString ? `?${queryString}` : ''}`;
 
-    const data = await fetchApi<ProductsResponse | Product[]>(endpoint);
+    const data = await fetchApi<ProductsResponse | Product[] | SpringPageResponse>(endpoint);
 
-    // Handle both array response and paginated response
+    // Handle array response
     if (Array.isArray(data)) {
       return limit ? data.slice(0, limit) : data;
     }
 
+    // Handle Spring Boot Page response
+    if ('content' in data) {
+      return data.content;
+    }
+
+    // Handle custom ProductsResponse format
     return data.products;
   } catch {
     // Return mock data when API is unavailable
@@ -143,7 +165,7 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
 
 export async function getProduct(id: string): Promise<Product | null> {
   try {
-    return await fetchApi<Product>(`/api/products/${id}`);
+    return await fetchApi<Product>(`/api/v1/products/${id}`);
   } catch {
     // Return mock product when API is unavailable
     const product = mockProducts.find((p) => p.id === id);
@@ -153,7 +175,7 @@ export async function getProduct(id: string): Promise<Product | null> {
 
 export async function getCategories(): Promise<string[]> {
   try {
-    return await fetchApi<string[]>('/api/categories');
+    return await fetchApi<string[]>('/api/v1/categories');
   } catch {
     // Return mock categories when API is unavailable
     const categories = Array.from(new Set(mockProducts.map((p) => p.category).filter(Boolean)));

@@ -6,6 +6,9 @@ export const metadata = {
   description: 'Browse our collection of products',
 };
 
+// Force dynamic rendering to fetch fresh data on each request
+export const dynamic = 'force-dynamic';
+
 export default async function ProductsPage() {
   const products = await getProducts();
 
