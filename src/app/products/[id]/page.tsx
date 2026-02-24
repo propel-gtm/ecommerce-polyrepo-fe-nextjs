@@ -59,9 +59,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Product Image */}
         <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden">
-          {product.imageUrl ? (
+          {product.thumbnailUrl ? (
             <Image
-              src={product.imageUrl}
+              src={product.thumbnailUrl}
               alt={product.name}
               fill
               className="object-cover"
@@ -106,12 +106,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="flex items-center gap-4 mb-8">
             <span
               className={`px-3 py-1 rounded-full text-sm font-medium ${
-                product.inStock
+                product.stockStatus === 'IN_STOCK' || product.stockStatus === 'LOW_STOCK'
                   ? 'bg-green-100 text-green-800'
                   : 'bg-red-100 text-red-800'
               }`}
             >
-              {product.inStock ? 'In Stock' : 'Out of Stock'}
+              {product.stockStatus === 'IN_STOCK' ? 'In Stock' :
+               product.stockStatus === 'LOW_STOCK' ? 'Low Stock' :
+               product.stockStatus === 'PREORDER' ? 'Pre-order' : 'Out of Stock'}
             </span>
             {product.category && (
               <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
@@ -121,7 +123,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
 
           <button
-            disabled={!product.inStock}
+            disabled={product.stockStatus === 'OUT_OF_STOCK' || product.stockStatus === 'DISCONTINUED'}
             className="w-full sm:w-auto px-8 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
             Add to Cart

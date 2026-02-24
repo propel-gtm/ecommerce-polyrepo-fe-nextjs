@@ -12,9 +12,9 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
         {/* Product Image */}
         <div className="relative aspect-square bg-gray-100">
-          {product.imageUrl ? (
+          {product.thumbnailUrl ? (
             <Image
-              src={product.imageUrl}
+              src={product.thumbnailUrl}
               alt={product.name}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -37,7 +37,7 @@ export function ProductCard({ product }: ProductCardProps) {
               </svg>
             </div>
           )}
-          {!product.inStock && (
+          {(product.stockStatus === 'OUT_OF_STOCK' || product.stockStatus === 'DISCONTINUED') && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
               <span className="text-white font-medium">Out of Stock</span>
             </div>

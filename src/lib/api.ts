@@ -1,13 +1,16 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
+export type StockStatus = 'IN_STOCK' | 'LOW_STOCK' | 'OUT_OF_STOCK' | 'PREORDER' | 'DISCONTINUED';
+
 export interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
-  imageUrl?: string;
+  thumbnailUrl?: string;
   category?: string;
-  inStock: boolean;
+  stockStatus: StockStatus;
+  availableQuantity: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -40,54 +43,60 @@ const mockProducts: Product[] = [
     name: 'Wireless Headphones',
     description: 'High-quality wireless headphones with noise cancellation and long battery life.',
     price: 149.99,
-    imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
     category: 'Electronics',
-    inStock: true,
+    stockStatus: 'IN_STOCK' as StockStatus,
+    availableQuantity: 50,
   },
   {
     id: '2',
     name: 'Leather Backpack',
     description: 'Stylish leather backpack perfect for work or travel.',
     price: 89.99,
-    imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500',
     category: 'Accessories',
-    inStock: true,
+    stockStatus: 'IN_STOCK' as StockStatus,
+    availableQuantity: 50,
   },
   {
     id: '3',
     name: 'Smart Watch',
     description: 'Feature-packed smartwatch with health tracking and notifications.',
     price: 299.99,
-    imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',
     category: 'Electronics',
-    inStock: true,
+    stockStatus: 'IN_STOCK' as StockStatus,
+    availableQuantity: 50,
   },
   {
     id: '4',
     name: 'Running Shoes',
     description: 'Lightweight and comfortable running shoes for daily workouts.',
     price: 129.99,
-    imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500',
     category: 'Footwear',
-    inStock: false,
+    stockStatus: 'OUT_OF_STOCK' as StockStatus,
+    availableQuantity: 0,
   },
   {
     id: '5',
     name: 'Coffee Maker',
     description: 'Premium coffee maker for the perfect morning brew.',
     price: 79.99,
-    imageUrl: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500',
     category: 'Home',
-    inStock: true,
+    stockStatus: 'IN_STOCK' as StockStatus,
+    availableQuantity: 50,
   },
   {
     id: '6',
     name: 'Desk Lamp',
     description: 'Modern LED desk lamp with adjustable brightness.',
     price: 49.99,
-    imageUrl: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500',
     category: 'Home',
-    inStock: true,
+    stockStatus: 'IN_STOCK' as StockStatus,
+    availableQuantity: 50,
   },
 ];
 
