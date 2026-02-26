@@ -131,7 +131,7 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
     if (category) params.append('category', category);
 
     const queryString = params.toString();
-    const endpoint = `/api/v1/products${queryString ? `?${queryString}` : ''}`;
+    const endpoint = `/api/v2/products${queryString ? `?${queryString}` : ''}`;
 
     const data = await fetchApi<ProductsResponse | Product[] | SpringPageResponse>(endpoint);
 
@@ -165,7 +165,7 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
 
 export async function getProduct(id: string): Promise<Product | null> {
   try {
-    return await fetchApi<Product>(`/api/v1/products/${id}`);
+    return await fetchApi<Product>(`/api/v2/products/${id}`);
   } catch {
     // Return mock product when API is unavailable
     const product = mockProducts.find((p) => p.id === id);
@@ -175,7 +175,7 @@ export async function getProduct(id: string): Promise<Product | null> {
 
 export async function getCategories(): Promise<string[]> {
   try {
-    return await fetchApi<string[]>('/api/v1/categories');
+    return await fetchApi<string[]>('/api/v2/categories');
   } catch {
     // Return mock categories when API is unavailable
     const categories = Array.from(new Set(mockProducts.map((p) => p.category).filter(Boolean)));
