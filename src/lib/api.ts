@@ -121,13 +121,13 @@ async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> 
 }
 
 export async function getProducts(options: GetProductsOptions = {}): Promise<Product[]> {
-  const { limit, page = 1, category } = options;
+  const { limit, page = 0, category } = options;
 
   try {
     const params = new URLSearchParams();
     if (limit) params.append('limit', String(limit));
-    // Spring Boot uses 0-based page indexing, so subtract 1
-    if (page) params.append('page', String(page - 1));
+    // API now expects 0-based page indexing directly
+    if (page !== undefined) params.append('page', String(page));
     if (category) params.append('category', category);
 
     const queryString = params.toString();
