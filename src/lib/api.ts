@@ -33,6 +33,10 @@ interface GetProductsOptions {
   category?: string;
 }
 
+function toBackendPage(page: number): number {
+  return Math.max(page, 1) - 1;
+}
+
 // Mock data for development when API is not available
 const mockProducts: Product[] = [
   {
@@ -126,8 +130,8 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
   try {
     const params = new URLSearchParams();
     if (limit) params.append('limit', String(limit));
-    // Spring Boot uses 0-based page indexing, so subtract 1
-    if (page) params.append('page', String(page - 1));
+    // Spring Boot uses 0-based page indexing; clamp incoming UI page to 1+.
+    if (page) params.append('page', String(toBackendPage(page)));
     if (category) params.append('category', category);
 
     const queryString = params.toString();
