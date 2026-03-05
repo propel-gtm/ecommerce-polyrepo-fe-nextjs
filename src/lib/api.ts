@@ -174,8 +174,17 @@ export async function getProduct(id: string): Promise<Product | null> {
 }
 
 export async function getCategories(): Promise<string[]> {
+  const categoryEndpoints = ['/api/v1/categories', '/api/v1/product-categories'];
+
   try {
-    return await fetchApi<string[]>('/api/v1/categories');
+    for (const endpoint of categoryEndpoints) {
+      try {
+        return await fetchApi<string[]>(endpoint);
+      } catch {
+        // Try next endpoint variant.
+      }
+    }
+    throw new Error('No category endpoint responded');
   } catch {
     // Return mock categories when API is unavailable
     const categories = Array.from(new Set(mockProducts.map((p) => p.category).filter(Boolean)));
