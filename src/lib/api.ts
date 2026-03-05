@@ -127,7 +127,7 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
     const params = new URLSearchParams();
     if (limit) params.append('limit', String(limit));
     // Spring Boot uses 0-based page indexing, so subtract 1
-    if (page) params.append('page', String(page - 1));
+    if (page) params.append('page', String(page));
     if (category) params.append('category', category);
 
     const queryString = params.toString();
