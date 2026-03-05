@@ -22,6 +22,7 @@ export interface ProductsResponse {
 // Spring Boot Page response format
 interface SpringPageResponse {
   content: Product[];
+  items?: Product[];
   totalElements: number;
   number: number;
   size: number;
@@ -141,8 +142,8 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
     }
 
     // Handle Spring Boot Page response
-    if ('content' in data) {
-      return data.content;
+    if ('content' in data || 'items' in data) {
+      return data.content ?? data.items ?? [];
     }
 
     // Handle custom ProductsResponse format
