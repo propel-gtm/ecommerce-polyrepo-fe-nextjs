@@ -145,8 +145,8 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
       return data.content;
     }
 
-    // Handle custom ProductsResponse format
-    return data.products;
+    // Handle custom ProductsResponse format with items fallback.
+    return data.products ?? (data as { items?: Product[] }).items ?? [];
   } catch {
     // Return mock data when API is unavailable
     let products = [...mockProducts];
