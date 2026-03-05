@@ -6,9 +6,15 @@ interface ProductCardProps {
   product: Product;
 }
 
+const PRODUCT_DETAIL_ROUTE_PREFIX = '/products';
+
+function toProductDetailHref(productId: string): string {
+  return `${PRODUCT_DETAIL_ROUTE_PREFIX}/${encodeURIComponent(productId)}`;
+}
+
 export function ProductCard({ product }: ProductCardProps) {
   return (
-    <Link href={`/products/${product.id}`} className="group">
+    <Link href={toProductDetailHref(product.id)} className="group">
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
         {/* Product Image */}
         <div className="relative aspect-square bg-gray-100">
