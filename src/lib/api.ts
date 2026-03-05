@@ -131,7 +131,7 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
     if (category) params.append('category', category);
 
     const queryString = params.toString();
-    const endpoint = `/api/v1/products${queryString ? `?${queryString}` : ''}`;
+    const endpoint = `/api/v2/products${queryString ? `?${queryString}` : ''}`;
 
     const data = await fetchApi<ProductsResponse | Product[] | SpringPageResponse>(endpoint);
 
