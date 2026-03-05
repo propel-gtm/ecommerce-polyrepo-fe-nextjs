@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
+const CATALOG_ROUTE = '/products';
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -24,7 +26,7 @@ export function Header() {
               Home
             </Link>
             <Link
-              href="/products"
+              href={CATALOG_ROUTE}
               className="text-gray-600 hover:text-primary-600 transition-colors"
             >
               Products
@@ -99,7 +101,7 @@ export function Header() {
                 Home
               </Link>
               <Link
-                href="/products"
+                href={CATALOG_ROUTE}
                 className="text-gray-600 hover:text-primary-600 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
