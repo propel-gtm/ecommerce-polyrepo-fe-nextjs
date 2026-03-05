@@ -1,4 +1,5 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const PRODUCTS_BASE_PATH = '/api/v1/products';
 
 export interface Product {
   id: string;
@@ -131,7 +132,7 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
     if (category) params.append('category', category);
 
     const queryString = params.toString();
-    const endpoint = `/api/v1/products${queryString ? `?${queryString}` : ''}`;
+    const endpoint = `${PRODUCTS_BASE_PATH}${queryString ? `?${queryString}` : ''}`;
 
     const data = await fetchApi<ProductsResponse | Product[] | SpringPageResponse>(endpoint);
 
@@ -165,7 +166,7 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
 
 export async function getProduct(id: string): Promise<Product | null> {
   try {
-    return await fetchApi<Product>(`/api/v1/products/${id}`);
+    return await fetchApi<Product>(`${PRODUCTS_BASE_PATH}/${id}`);
   } catch {
     // Return mock product when API is unavailable
     const product = mockProducts.find((p) => p.id === id);
