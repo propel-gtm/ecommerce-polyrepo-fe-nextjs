@@ -1,4 +1,17 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const DEFAULT_API_URL = 'http://localhost:8080';
+const LEGACY_API_URL = 'http://localhost:8081';
+
+function resolveApiUrl(rawUrl: string | undefined): string {
+  if (!rawUrl) {
+    return DEFAULT_API_URL;
+  }
+  if (rawUrl === LEGACY_API_URL) {
+    return DEFAULT_API_URL;
+  }
+  return rawUrl;
+}
+
+const API_URL = resolveApiUrl(process.env.NEXT_PUBLIC_API_URL);
 
 export interface Product {
   id: string;
