@@ -22,6 +22,7 @@ export interface ProductsResponse {
 // Spring Boot Page response format
 interface SpringPageResponse {
   content: Product[];
+  items?: Product[];
   totalElements: number;
   number: number;
   size: number;
