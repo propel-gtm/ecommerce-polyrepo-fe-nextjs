@@ -1,4 +1,9 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const PRODUCTS_BASE_PATH = '/api/v1/products';
+
+function getProductEndpoint(id: string): string {
+  return `${PRODUCTS_BASE_PATH}/${encodeURIComponent(id)}`;
+}
 
 export interface Product {
   id: string;
@@ -165,7 +170,7 @@ export async function getProducts(options: GetProductsOptions = {}): Promise<Pro
 
 export async function getProduct(id: string): Promise<Product | null> {
   try {
-    return await fetchApi<Product>(`/api/v1/products/${id}`);
+    return await fetchApi<Product>(getProductEndpoint(id));
   } catch {
     // Return mock product when API is unavailable
     const product = mockProducts.find((p) => p.id === id);
